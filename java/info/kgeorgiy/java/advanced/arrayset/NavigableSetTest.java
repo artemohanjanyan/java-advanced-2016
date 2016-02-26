@@ -38,6 +38,24 @@ public class NavigableSetTest extends SortedSetTest {
     }
 
     @Test
+    public void test19_ceiling() {
+        for (final Pair<NamedComparator, List<Integer>> pair : withComparator()) {
+            final List<Integer> elements = pair.getSecond();
+            final Comparator<Integer> comparator = pair.getFirst();
+            final NavigableSet<Integer> set = set(elements, comparator);
+            final NavigableSet<Integer> treeSet = treeSet(elements, comparator);
+
+            for (final Integer element : inAndOut(elements)) {
+                assertEquals(
+                        "in ceiling(" + element + ") (comparator = " + comparator + ", elements = " + elements + ")",
+                        treeSet.ceiling(element),
+                        set.ceiling(element)
+                );
+            }
+        }
+    }
+
+    @Test
     public void test20_higher() {
         for (final Pair<NamedComparator, List<Integer>> pair : withComparator()) {
             final List<Integer> elements = pair.getSecond();
@@ -50,6 +68,24 @@ public class NavigableSetTest extends SortedSetTest {
                         "in higher(" + element + ") (comparator = " + comparator + ", elements = " + elements + ")",
                         treeSet.higher(element),
                         set.higher(element)
+                );
+            }
+        }
+    }
+
+    @Test
+    public void test21_floor() {
+        for (final Pair<NamedComparator, List<Integer>> pair : withComparator()) {
+            final List<Integer> elements = pair.getSecond();
+            final Comparator<Integer> comparator = pair.getFirst();
+            final NavigableSet<Integer> set = set(elements, comparator);
+            final NavigableSet<Integer> treeSet = treeSet(elements, comparator);
+
+            for (final Integer element : inAndOut(elements)) {
+                assertEquals(
+                        "in floor(" + element + ") (comparator = " + comparator + ", elements = " + elements + ")",
+                        treeSet.floor(element),
+                        set.floor(element)
                 );
             }
         }
@@ -74,6 +110,58 @@ public class NavigableSetTest extends SortedSetTest {
                         treeSet.tailSet(element, false),
                         "in tailSet(" + element + ", false) (comparator = " + comparator + ", elements = " + elements + ")"
                 );
+            }
+        }
+    }
+
+    @Test
+    public void test23_navigableHeadSet() {
+        for (final Pair<NamedComparator, List<Integer>> pair : withComparator()) {
+            final List<Integer> elements = pair.getSecond();
+            final Comparator<Integer> comparator = pair.getFirst();
+            final NavigableSet<Integer> set = set(elements, comparator);
+            final NavigableSet<Integer> treeSet = treeSet(elements, comparator);
+
+            for (final Integer element : inAndOut(elements)) {
+                assertEq(
+                        set.headSet(element, true),
+                        treeSet.headSet(element, true),
+                        "in headSet(" + element + ", true) (comparator = " + comparator + ", elements = " + elements + ")"
+                );
+                assertEq(
+                        set.headSet(element, false),
+                        treeSet.headSet(element, false),
+                        "in headSet(" + element + ", false) (comparator = " + comparator + ", elements = " + elements + ")"
+                );
+            }
+        }
+    }
+
+    @Test
+    public void test24_navigableSubSet() {
+        for (final Pair<NamedComparator, List<Integer>> pair : withComparator()) {
+            final List<Integer> elements = pair.getSecond();
+            final Comparator<Integer> comparator = pair.getFirst();
+            final NavigableSet<Integer> set = set(elements, comparator);
+            final NavigableSet<Integer> treeSet = treeSet(elements, comparator);
+
+            final Collection<Integer> all = values(elements);
+            for (final Pair<Integer, Integer> p : somePairs(fixedValues(all), fixedValues(all))) {
+                final Integer from = p.getFirst();
+                final Integer to = p.getSecond();
+                if (comparator.compare(from, to) <= 0) {
+                    for (int i = 0; i < 4; i++) {
+                        assertEq(
+                                set.subSet(from, i % 2 == 1, to, i / 2 == 1),
+                                treeSet.subSet(from, i % 2 == 1, to, i / 2 == 1),
+                                String.format("in subSet(%d, %b, %d, %b) (comparator = %s, elements = %s",
+                                        from, i %2 == 1,
+                                        to, i / 2 == 1,
+                                        comparator, elements
+                                )
+                        );
+                    }
+                }
             }
         }
     }

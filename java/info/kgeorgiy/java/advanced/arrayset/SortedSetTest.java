@@ -86,6 +86,30 @@ public class SortedSetTest extends BaseTest {
     }
 
     @Test
+    public void test06_immutable() {
+        final SortedSet<Integer> set = set(Collections.singletonList(1));
+        checkUnsupported(() -> set.add(1));
+        checkUnsupported(() -> set.addAll(Collections.singletonList(1)));
+        checkUnsupported(set::clear);
+        checkUnsupported(() -> {
+            final Iterator<Integer> iterator = set.iterator();
+            iterator.next();
+            iterator.remove();
+        });
+        checkUnsupported(() -> set.remove(1));
+        checkUnsupported(() -> set.removeAll(Collections.singletonList(1)));
+        checkUnsupported(() -> set.retainAll(Collections.singletonList(0)));
+    }
+
+    private void checkUnsupported(final Runnable command) {
+        try {
+            command.run();
+            Assert.fail("add should throw UnsupportedOperationException");
+        } catch (final UnsupportedOperationException ignore) {
+        }
+    }
+
+    @Test
     public void test07_contains() {
         for (final Pair<NamedComparator, List<Integer>> pair : withComparator()) {
             final List<Integer> elements = pair.getSecond();
@@ -105,6 +129,16 @@ public class SortedSetTest extends BaseTest {
     }
 
     @Test
+    public void test08_containsPerformance() {
+        performance("contains", () -> {
+            final SortedSet<Integer> set = performanceSet(10_000);
+            for (final Integer element : set) {
+                Assert.assertTrue(null, set.contains(element));
+            }
+        });
+    }
+
+    @Test
     public void test09_containsAll() {
         for (final Pair<NamedComparator, List<Integer>> pair : withComparator()) {
             final List<Integer> elements = pair.getSecond();
@@ -121,6 +155,33 @@ public class SortedSetTest extends BaseTest {
                 Assert.assertEquals("containsAll(" + l + ") " + context, treeSet.containsAll(l), set.containsAll(l));
             }
         }
+    }
+
+    @Test
+    public void test10_containsAllPerformance() {
+        performance("contains", () -> {
+            final SortedSet<Integer> set = performanceSet(10_000);
+            Assert.assertTrue(null, set.containsAll(new ArrayList<>(set)));
+        });
+    }
+
+    private void performance(final String description, final Runnable runnable) {
+        runnable.run();
+
+        final long start = System.currentTimeMillis();
+        runnable.run();
+        final long time = System.currentTimeMillis() - start;
+        System.out.println("    " + description + " done in " + time + "ms");
+        Assert.assertTrue(description + " works too slow", time < 100);
+    }
+
+    private SortedSet<Integer> performanceSet(final int size) {
+        final Random random = new Random();
+        final List<Integer> list = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            list.add(random.nextInt());
+        }
+        return set(list);
     }
 
     private List<Integer> toList(final SortedSet<Integer> set) {
