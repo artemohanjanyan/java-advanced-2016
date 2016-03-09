@@ -10,14 +10,14 @@
         info.kgeorgiy.java.advanced.implementor.Tester interface <полное имя класса>
 
   Класс должен реализовывать интерфейс
-  [JarImpler](java/info/kgeorgiy/java/advanced/implementor/Impler.java).
+  [Impler](java/info/kgeorgiy/java/advanced/implementor/Impler.java).
 
 * Протестировать простую версию задания:
 
         info.kgeorgiy.java.advanced.implementor.Tester class <полное имя класса>
 
   Класс должен реализовывать интерфейс
-  [JarImpler](java/info/kgeorgiy/java/advanced/implementor/Impler.java).
+  [Impler](java/info/kgeorgiy/java/advanced/implementor/Impler.java).
 
 Исходный код тестов:
 
