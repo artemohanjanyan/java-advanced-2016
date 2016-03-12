@@ -1,6 +1,8 @@
 package info.kgeorgiy.java.advanced.implementor;
 
 import info.kgeorgiy.java.advanced.base.BaseTest;
+import info.kgeorgiy.java.advanced.implementor.examples.InterfaceWithDefaultMethod;
+import info.kgeorgiy.java.advanced.implementor.examples.InterfaceWithStaticMethod;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
@@ -71,6 +73,16 @@ public class InterfaceImplementorTest extends BaseTest {
     @Test
     public void test04_extendedInterfaces() throws IOException {
         test(false, Descriptor.class, CachedRowSet.class, DynAny.class);
+    }
+
+    @Test
+    public void test05_standardNonInterfaces() throws IOException {
+        test(true, void.class, String[].class, int[].class, String.class, boolean.class);
+    }
+
+    @Test
+    public void test06_java8Interfaces() throws IOException {
+        test(false, InterfaceWithStaticMethod.class, InterfaceWithDefaultMethod.class);
     }
 
     protected void test(final boolean shouldFail, final Class<?>... classes) throws IOException {
