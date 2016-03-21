@@ -10,13 +10,13 @@
         info.kgeorgiy.java.advanced.concurrent.Tester list <полное имя класса>
 
   Класс должен реализовывать интерфейс
-  [ScalarIP](java/info/kgeorgiy/java/advanced/concurrent/ScalarIP.java).
+  [ListIP](java/info/kgeorgiy/java/advanced/concurrent/ListIP.java).
 * Протестировать простую версию задания:
 
         info.kgeorgiy.java.advanced.concurrent.Tester scalar <полное имя класса>
 
   Класс должен реализовывать интерфейс
-  [ListIP](java/info/kgeorgiy/java/advanced/concurrent/ListIP.java).
+  [ScalarIP](java/info/kgeorgiy/java/advanced/concurrent/ScalarIP.java).
 
 Исходный код тестов:
 
